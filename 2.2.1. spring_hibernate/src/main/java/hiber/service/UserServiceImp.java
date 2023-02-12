@@ -1,6 +1,7 @@
 package hiber.service;
 
 import hiber.dao.UserDao;
+import hiber.exception.UserNotFoundException;
 import hiber.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,14 @@ public class UserServiceImp implements UserService {
    @Override
    public List<User> listUsers() {
       return userDao.listUsers();
+   }
+
+   @Transactional(readOnly = true)
+   @Override
+   public User findUserByCarModelAndSeries(String model, int series) {
+      return userDao.findUserByCarModelAndSeries(model, series)
+              .orElseThrow(() -> new UserNotFoundException(String.format("user having car model = % and series = % " +
+                      "not found", model, series)));
    }
 
 }
