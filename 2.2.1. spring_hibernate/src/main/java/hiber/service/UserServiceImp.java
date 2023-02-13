@@ -11,9 +11,12 @@ import java.util.List;
 
 @Service
 public class UserServiceImp implements UserService {
+   private final UserDao userDao;
 
    @Autowired
-   private UserDao userDao;
+   public UserServiceImp(UserDao userDao) {
+      this.userDao = userDao;
+   }
 
    @Transactional
    @Override
@@ -34,5 +37,4 @@ public class UserServiceImp implements UserService {
               .orElseThrow(() -> new UserNotFoundException(String.format("user having car model = % and series = % " +
                       "not found", model, series)));
    }
-
 }
