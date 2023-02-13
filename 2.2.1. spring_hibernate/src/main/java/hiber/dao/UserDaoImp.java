@@ -12,9 +12,12 @@ import java.util.Optional;
 
 @Repository
 public class UserDaoImp implements UserDao {
+   private final SessionFactory sessionFactory;
 
    @Autowired
-   private SessionFactory sessionFactory;
+   public UserDaoImp(SessionFactory sessionFactory) {
+      this.sessionFactory = sessionFactory;
+   }
 
    @Override
    public void add(User user) {
@@ -22,16 +25,16 @@ public class UserDaoImp implements UserDao {
    }
 
    @Override
-   @SuppressWarnings("unchecked")
    public List<User> listUsers() {
-      TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User");
+      TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User", User.class);
       return query.getResultList();
    }
 
+   @Override
    public Optional<User> findUserByCarModelAndSeries(String model, int series) {
       Query<User> query = sessionFactory.getCurrentSession()
-              .createQuery("select u from User u left join Car c on u.car.id = c.id where lower(c.model) " +
-                      "like lower(concat('%', :model, '%')) and c.series = :series", User.class)
+              .createQuery("select user from User user where lower(user.car.model) like " +
+                      "lower(concat('%', :model, '%')) and user.car.series = :series", User.class)
               .setParameter("model", model)
               .setParameter("series", series)
               .setMaxResults(1);
