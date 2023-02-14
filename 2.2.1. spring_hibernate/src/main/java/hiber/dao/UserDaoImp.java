@@ -33,8 +33,7 @@ public class UserDaoImp implements UserDao {
    @Override
    public Optional<User> findUserByCarModelAndSeries(String model, int series) {
       Query<User> query = sessionFactory.getCurrentSession()
-              .createQuery("select user from User user where lower(user.car.model) like " +
-                      "lower(concat('%', :model, '%')) and user.car.series = :series", User.class)
+              .createQuery("from User where car.model like :model and car.series = :series", User.class)
               .setParameter("model", model)
               .setParameter("series", series)
               .setMaxResults(1);
