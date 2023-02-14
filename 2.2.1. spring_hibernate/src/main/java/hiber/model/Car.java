@@ -17,9 +17,6 @@ public class Car {
     @Column(name = "series")
     private Integer series;
 
-    @OneToOne(mappedBy = "car")
-    private User owner;
-
     public Car() {
     }
 
@@ -34,7 +31,6 @@ public class Car {
                 "id=" + id +
                 ", model='" + model + '\'' +
                 ", series=" + series +
-                ", owner=" + owner.getId() +
                 '}';
     }
 }
